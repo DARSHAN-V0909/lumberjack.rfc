@@ -1,3 +1,7 @@
+<!--THIS IS THE LOGIN PAGE OF THE APPLICATION
+    all necessary information regarding to the crucial app functionality is given below please give it a read before proceeding
+    with frontend customisation
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +11,21 @@
     
 </head>
 <body>
-    <form method="POST" id="loginForm">
+    <form method="POST" id="loginForm"><!--Please dont change any of the ids or names here they are used by the js to send requests to the backend-->
         Username: <input type="text" name="username" id="username"><br>
         Password: <input type="password" name="password" id="password"><br>
         <button type="submit">Submit</button>
     </form>
-    <a href="/register">Register </a>
+    <a href="/register">Register </a><!--sends a GET request to the backennd asking to send HTML page of register, 
+    isnt a direct HTML page link, try to keep this in mind and send requests like this to flask with /pageName to go to other pages
+    will get jinja template error otherwise, please inform the backend team or insert something like this in the flask app after 
+    line 20 and before if name==main to create a request to a custom new html page
+    @app.route('/yourPageName')## directs to the page
+    def customFuncName():
+    return render_template('register.html')#enter actual html page link here
+    -->
     <script src="../static/login.js"></script>
+    <!--By default all js files are in the static folder, try to keep all CSS,JS and resource files there only HTML pages come
+    in the templates folder/directory-->
 </body>
 </html>

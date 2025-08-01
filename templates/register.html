@@ -1,3 +1,7 @@
+<!--THIS IS THE REGISTRATION PAGE
+    some necessary information regarding app functionality given here, please read comments on login.hhtml and login.js to understand 
+    what is happening there
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +11,14 @@
 </head>
 <body>
     <h1>Register</h1>
-    <form method="POST" id="registerForm">
+    <form method="POST" id="registerForm"><!--thsi is the main form field, try to avoid changing this form id and  the username password
+        text  field name and ID attributes as the JS relies on them-->
         Username: <input type="text" name="username" id="username"><br>
         Password: <input type="text" name="password" id="password"><br>
         <button type="submit">Submit</button>
     </form>
-    <a href="/login">login</a>
+    <a href="/login">login</a><!--- this is a link to the login page, please read the information about GET requests in login.html
+    if you haven't already that will be really helpful-->
     <script src="../static/register.js"></script>
 </body>
 </html>

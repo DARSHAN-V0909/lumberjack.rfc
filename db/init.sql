@@ -1,5 +1,9 @@
 /*
 * Make sure to create this DB in your mysql workbench shell by running all the below commands before running your app
+* What is the  use of this file?
+* In case  you want to run the program and also have the data of a few users you can use this, just go to your MySQl workbench and
+* run whatever queries you havent run already and your DB should be synced with all the collaborators.
+* THIS WILL BE REMOVED ON PROD
 */
 
 CREATE DATABASE inventory_db;

@@ -11,9 +11,12 @@
     
 </head>
 <body>
+    {%if logout%}
+        <script>alert('You have logged out')</script>
+    {%endif%}
     <form method="POST" id="loginForm"><!--Please dont change any of the ids or names here they are used by the js to send requests to the backend-->
-        Username: <input type="text" name="username" id="username"><br>
-        Password: <input type="password" name="password" id="password"><br>
+        Username: <input type="text" name="username" id="username" required><br>
+        Password: <input type="password" name="password" id="password" required><br>
         <button type="submit">Submit</button>
     </form>
     <a href="/register">Register </a><!--sends a GET request to the backennd asking to send HTML page of register, 

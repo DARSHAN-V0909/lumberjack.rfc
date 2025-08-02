@@ -15,8 +15,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE raw_materials (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL,
+    material_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
     unit VARCHAR(20),
     current_stock INT DEFAULT 0,
     threshold INT DEFAULT 0,
@@ -31,7 +31,13 @@ CREATE TABLE transactions (
     type ENUM('add', 'remove') NOT NULL,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT,
-    FOREIGN KEY (material_id) REFERENCES raw_materials(id),
+    FOREIGN KEY (material_id) REFERENCES raw_materials(material_id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-INSERT INTO users (username, password_hash) VALUES ('vishnu2', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
+INSERT INTO users (username, password_hash) VALUES ('vishnu', 'password');
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rice', 'kg', 100, 10, 1);
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cement', 'kg', 20, 5, 1);
+INSERT INTO users (username, password_hash) VALUES ('person', 'tangela');
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cotton', 'bags', 10, 1, 2);
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cheese', 'kg', 20, 7, 2);
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Vineager', 'Liters', 200, 70, 2);

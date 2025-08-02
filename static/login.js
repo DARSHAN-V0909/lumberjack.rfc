@@ -16,6 +16,7 @@ form.addEventListener('submit',async function(event){//async function to allow u
     console.log(result);//logs the response
     if(response.ok){//sends an inscreen alert to user, BETTER THIS USING redirect pages and a proper login validation/rejection
         alert("Login Successful");
+        window.location.href='/home';
     }else{
         alert('Error: ' + result.error || result.message||"Unknown error");//fallback pattern
     }

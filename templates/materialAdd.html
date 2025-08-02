@@ -1,0 +1,29 @@
+<!---This page is designed to handle insertion queries to the database, this page could be merged with the materials display page
+    later on-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Add materials</h1>
+    <form method="POST" id="materialsAdd">
+        Material Name: <input type="text" name="name" id="name" required><br>
+        Unit:          <select name="unit" id="unit" required>
+                            <option value="kg">kg</option><br>
+                            <option value="Liters">Liters</option><br>
+                            <option value="g">grams</option>
+                            <option value="pieces">pieces</option>
+                            <option value="bags">bags</option>
+                            <option value="units">units</option>
+                         </select><br>
+        Current Stock:   <input type="number" name="current_stock" id="current_stock" required min="0"><br>
+        Threshold (Minimum stock): <input type="number" name="threshold" id="threshold" required min="0"><br>
+        <input type="submit" value="submit">
+    </form>
+    <a href="/home">Back to home</a>
+    <script src="../static/materialsAdd.js"></script>
+</body>
+</html>

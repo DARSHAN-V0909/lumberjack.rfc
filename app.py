@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify, session,render_template
+from flask import redirect, url_for
 import mysql.connector
 from mysql.connector import IntegrityError
 import hashlib
 import secrets
 import os
+from mysql.connector import Error
 ## to install mysql.connector and flask have to install inside venv not globally
 app = Flask(__name__)
 
@@ -18,6 +20,7 @@ def get_connection():
         password="rmms1!",
         database="inventory_db"
     )
+
 @app.route('/')##this is default landing page of the app
 @app.route('/login', methods=['GET'])# this get method has been specified to not confuse with the other POST method, there are 2 links above this function as this is specified to be the default landing page and should be accesible by the link
 def home():
@@ -31,7 +34,6 @@ def register():
     data = request.get_json()#gets the POST json object from the frontend JS 
     username = data['username']#extracts the username field from the json
     password = hashlib.sha256(data['password'].encode()).hexdigest()#extracts and encodes password to sha256 encryption
-
     conn = get_connection()#establishes connection with the database
     cursor = conn.cursor()#this signals the start of a query being written now we can write queries to the db
     try:#try catch to handle case where user has tried to register with duplicate username
@@ -74,57 +76,76 @@ def login():
 
     if user:#if user info was retrieved successfully do this user would be None otherwise
         session['user_id'] = user['id']#sets the session userId to the id field we retrieved from the DB
+        session['username']=username
         return jsonify({"message": "Login successful"})#sends a successful response to the frontend
     return jsonify({"error": "Invalid credentials"}), 401#throws error and should redirect to our custom error 303 HTML page
 #TO-DO WORK ON THIS LOGIN PAGE
 @app.route('/logout')
 def logout():
     session.clear()
-    return jsonify({"message": "Logged out"})
+    return render_template('login.html',logout=True)
 
 # ---------- MATERIAL ROUTES ----------
-#TO-DO Work on this materials page and add a materials html page
-@app.route('/materials', methods=['GET', 'POST'])
+
+@app.route('/materialAdd')
+def materialsAddPage():
+    return render_template("materialAdd.html")
+
+@app.route("/materialView")
+def materialsViewPage():
+    return render_template('materialView.html')
+
+@app.route('/materials', methods=['GET', 'POST'])#handles both get and post requests
 def materials():
+    if 'user_id' not in session:#user_id is always set on login if the user isnt logged in,wont be set
+        return jsonify({"error": "Unauthorized"}), 401
+    try:
+        conn = get_connection()#gets connection to the DB
+        cursor = conn.cursor(dictionary=True)
+
+        if request.method == 'GET':
+            cursor.execute("SELECT * FROM raw_materials WHERE user_id = %s", (session['user_id'],))
+            materials = cursor.fetchall()
+            conn.close()
+            return jsonify(materials)
+
+        if request.method == 'POST':#gets the name,unit,current_stock,threshold attributes from the frontend
+            data = request.get_json()
+            name = data['name']
+            unit = data['unit']
+            current_stock = data['current_stock']
+            threshold = data['threshold']
+            user_id = session['user_id']
+
+            cursor.execute(
+                "INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES (%s, %s, %s, %s, %s)",
+                (name, unit, current_stock, threshold, user_id)
+            )
+            conn.commit()
+            conn.close()
+
+            db_path = os.path.join(os.path.dirname(__file__), 'db', 'init.sql')
+            with open(db_path, 'a') as f:
+                ename = name.replace("'", "''")
+                eunit = unit.replace("'", "''")
+                f.write(
+                    f"INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) "
+                    f"VALUES ('{ename}', '{eunit}', {current_stock}, {threshold}, {user_id});\n"
+                )
+
+            return jsonify({"message": "Material added"}), 201
+    except Error as e:#if duplicate name passed as material will return a sql exception and alert passed to user
+        print(f"SQL Error: {e}")
+        return jsonify({"error": "Insertion error", "details": str(e)}), 400
+
+    finally:
+        if conn.is_connected():
+            conn.close()
+@app.route('/home')
+def homeDirect():
     if 'user_id' not in session:
         return jsonify({"error": "Unauthorized"}), 401
-
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    if request.method == 'GET':
-        cursor.execute("SELECT * FROM raw_materials WHERE user_id = %s", (session['user_id'],))
-        materials = cursor.fetchall()
-        conn.close()
-        return jsonify(materials)
-
-    if request.method == 'POST':
-        data = request.get_json()
-        name = data['name']
-        unit = data['unit']
-        current_stock = data['current_stock']
-        threshold = data['threshold']
-        user_id = session['user_id']
-
-        cursor.execute(
-            "INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES (%s, %s, %s, %s, %s)",
-            (name, unit, current_stock, threshold, user_id)
-        )
-        conn.commit()
-        conn.close()
-
-        db_path = os.path.join(os.path.dirname(__file__), 'db', 'init.sql')
-        with open(db_path, 'a') as f:
-            ename = name.replace("'", "''")
-            eunit = unit.replace("'", "''")
-            f.write(
-                f"INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) "
-                f"VALUES ('{ename}', '{eunit}', {current_stock}, {threshold}, {user_id});\n"
-            )
-
-        return jsonify({"message": "Material added"}), 201
-
-# More routes like /transactions and /stock/status can follow...
+    return render_template("dashboard.html",username=session['username'])
 
 @app.errorhandler(404)##flask default page for error 404
 def page_not_found(e):

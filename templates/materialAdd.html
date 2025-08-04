@@ -10,18 +10,15 @@
 <body>
     <h1>Add materials</h1>
     <form method="POST" id="materialsAdd">
-        Material Name: <input type="text" name="name" id="name" required><br>
-        Unit:          <select name="unit" id="unit" required>
-                            <option value="kg">kg</option><br>
-                            <option value="Liters">Liters</option><br>
-                            <option value="g">grams</option>
-                            <option value="pieces">pieces</option>
-                            <option value="bags">bags</option>
-                            <option value="units">units</option>
-                         </select><br>
-        Current Stock:   <input type="number" name="current_stock" id="current_stock" required min="0"><br>
-        Threshold (Minimum stock): <input type="number" name="threshold" id="threshold" required min="0"><br>
-        <input type="submit" value="submit">
+        Operation:      <select name="operation" id="operation">
+                            <option value="ADD">Add New Material</option>
+                            <option value="UPDATE">Update Existing material Quantity</option>
+                            <option value="DELETE">Delete a material</option>
+                        </select>
+        <div id="renderArea">
+
+        </div>
+        <div id="numField"></div>
     </form>
     <a href="/home">Back to home</a>
     <script src="../static/materialsAdd.js"></script>

@@ -1,10 +1,9 @@
-**ALL CSS and JS And resources go in static folder, HTML in templates
-To run all of this on your system make sure flask is installed and if code not running run the following:
-To get venv environment in your folder:
-py -3 -m venv .venv
-
-Activate scripts:
-.venv\Scripts\activate
-
-Install flask:
-pip install Flask
+#**ALL CSS and JS And resources go in static folder, HTML in templates
+# To run all of this on your system make sure flask is installed and if code not running run the following:
+# To get venv environment in your folder:
+# py -3 -m venv .venv
+# Activate scripts:
+# .venv\Scripts\activate
+# Install flask:
+# pip install Flask:
+Flask

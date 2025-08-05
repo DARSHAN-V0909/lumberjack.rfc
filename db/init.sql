@@ -55,3 +55,10 @@ UPDATE raw_materials SET current_stock = 21 WHERE material_id = 10 AND user_id =
 INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (10, 11, 'add', 1);
 DELETE FROM transactions WHERE material_id=10 and user_id=1;
 DELETE FROM raw_materials WHERE name = 'rubber' AND user_id = 1;
+UPDATE raw_materials SET current_stock = 120 WHERE material_id = 1 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (1, 10, 'add', 1);
+UPDATE raw_materials SET current_stock = 9 WHERE material_id = 7 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (7, 1, 'remove', 1);
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rubber', 'bags', 100, 10, 1);
+UPDATE raw_materials SET current_stock = 90 WHERE material_id = 11 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (11, 10, 'remove', 1);

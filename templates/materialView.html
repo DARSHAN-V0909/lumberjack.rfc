@@ -8,13 +8,20 @@
 </head>
 <body>
     <h1>Material View</h1>
+    <select name="view" id="view">
+        <option value="materials">Materials</option>
+        <option value="transactions">Transactions</option>
+    </select>
     <table id="renderTable" border="1">
-        <tr>
+        <tr id="headRow">
             <th>Material</th>
             <th>Unit</th>
             <th>Current Stock</th>
             <th>Threshold</td>
         </tr>
+        <div id="innerInfo">
+            
+        </div>
     </table>
     <a href="/home">Back to home</a>
     <script src="../static/materialView.js"></script>

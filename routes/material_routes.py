@@ -162,7 +162,25 @@ def delete_material():
 
     finally:
         conn.close()
+@material_bp.route('/transactions',methods=['GET'])
+def getTransactions():
+    if 'user_id' not in session:
+        return jsonify({"error": "Unauthorized"}), 401
 
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT transactions.*,raw_materials.name FROM transactions INNER JOIN raw_materials ON  transactions.material_id = raw_materials.material_id WHERE transactions.user_id = %s", (session['user_id'],))
+        transactions = cursor.fetchall()
+        return jsonify(transactions)
+
+    except Error as e:
+        print(f"SQL Error: {e}")
+        return jsonify({"error": "Failed to fetch transactions", "details": str(e)}), 400
+
+    finally:
+        conn.close()
 @material_bp.route('/home')
 def homeDirect():
     if 'user_id' not in session:

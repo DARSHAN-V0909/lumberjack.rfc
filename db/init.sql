@@ -62,3 +62,10 @@ INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (7, 1, 'r
 INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rubber', 'bags', 100, 10, 1);
 UPDATE raw_materials SET current_stock = 90 WHERE material_id = 11 AND user_id = 1;
 INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (11, 10, 'remove', 1);
+UPDATE raw_materials SET current_stock = 1 WHERE material_id = 7 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (7, 8, 'remove', 1);
+INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Tea', 'kg', 8, 100, 1);
+UPDATE raw_materials SET current_stock = 90 WHERE material_id = 12 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (12, 82, 'add', 1);
+UPDATE raw_materials SET current_stock = 100 WHERE material_id = 12 AND user_id = 1;
+INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (12, 10, 'add', 1);

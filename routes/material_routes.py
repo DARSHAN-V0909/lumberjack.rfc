@@ -181,6 +181,25 @@ def getTransactions():
 
     finally:
         conn.close()
+@material_bp.route('/stockStatus',methods=['GET'])
+def stock_status():
+    if 'user_id' not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    try:
+        conn = get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT name,unit,current_stock,threshold FROM raw_materials WHERE user_id = %s AND current_stock<=threshold", (session['user_id'],))
+        materials = cursor.fetchall()
+        return jsonify(materials)
+
+    except Error as e:
+        print(f"SQL Error: {e}")
+        return jsonify({"error": "Failed to fetch material data", "details": str(e)}), 400
+
+    finally:
+        conn.close()
 @material_bp.route('/home')
 def homeDirect():
     if 'user_id' not in session:

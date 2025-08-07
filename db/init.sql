@@ -5,7 +5,6 @@
 * run whatever queries you havent run already and your DB should be synced with all the collaborators.
 * THIS WILL BE REMOVED ON PROD
 */
-
 CREATE DATABASE inventory_db;
 USE inventory_db;
 CREATE TABLE users (
@@ -34,38 +33,27 @@ CREATE TABLE transactions (
     FOREIGN KEY (material_id) REFERENCES raw_materials(material_id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-INSERT INTO users (username, password_hash) VALUES ('vishnu', 'password');
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rice', 'kg', 100, 10, 1);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cement', 'kg', 20, 5, 1);
-INSERT INTO users (username, password_hash) VALUES ('person', 'tangela');
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cotton', 'bags', 10, 1, 2);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Cheese', 'kg', 20, 7, 2);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Vineager', 'Liters', 200, 70, 2);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Corn', 'kg', 10, 2, 1);
-DELETE FROM raw_materials WHERE name = 'Cement' AND user_id = 1;
-UPDATE raw_materials SET current_stock = 110 WHERE material_id = 1 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (1, 10, 'add', 1);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rubber', 'kg', 100, 9, 1);
-UPDATE raw_materials SET current_stock = 82 WHERE material_id = 9 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (9, 18, 'remove', 1);
-UPDATE raw_materials SET current_stock = 92 WHERE material_id = 9 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (9, 10, 'add', 1);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('rubber', 'kg', 10, 10, 1);
-UPDATE raw_materials SET current_stock = 21 WHERE material_id = 10 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (10, 11, 'add', 1);
-DELETE FROM transactions WHERE material_id=10 and user_id=1;
-DELETE FROM raw_materials WHERE name = 'rubber' AND user_id = 1;
-UPDATE raw_materials SET current_stock = 120 WHERE material_id = 1 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (1, 10, 'add', 1);
-UPDATE raw_materials SET current_stock = 9 WHERE material_id = 7 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (7, 1, 'remove', 1);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Rubber', 'bags', 100, 10, 1);
-UPDATE raw_materials SET current_stock = 90 WHERE material_id = 11 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (11, 10, 'remove', 1);
-UPDATE raw_materials SET current_stock = 1 WHERE material_id = 7 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (7, 8, 'remove', 1);
-INSERT INTO raw_materials (name, unit, current_stock, threshold, user_id) VALUES ('Tea', 'kg', 8, 100, 1);
-UPDATE raw_materials SET current_stock = 90 WHERE material_id = 12 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (12, 82, 'add', 1);
-UPDATE raw_materials SET current_stock = 100 WHERE material_id = 12 AND user_id = 1;
-INSERT INTO transactions (material_id, quantity, type, user_id) VALUES (12, 10, 'add', 1);
+CREATE TABLE suppliers(
+    supplier_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    material_id INT,
+    supplier_name VARCHAR(200),
+    phone_number VARCHAR(15),
+    FOREIGN KEY (material_id) REFERENCES raw_materials(material_id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+CREATE TABLE menu_items(
+    menu_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    item_name VARCHAR(50),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+CREATE TABLE menu_requirements(
+    user_id INT,
+    menu_id INT ,
+    material_id INT ,
+    PRIMARY KEY (user_id, menu_id, material_id),
+    FOREIGN KEY(user_id) REFERENCES menu_items(user_id),
+    FOREIGN KEY(menu_id) REFERENCES menu_items(menu_id),
+    FOREIGN KEY(material_id) REFERENCES raw_materials(material_id)
+);
